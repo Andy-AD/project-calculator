@@ -46,11 +46,28 @@ body {
     font-size: 20px;
 }
 
+.other_buttons {
+    height: 255px;
+    display: flex;
+    flex-direction: column;
+}
 
 .other_buttons button{
-    background-color: rgb(2, 172, 73);
     width: 80px;
-    height: 250px;
     font-size: 30px;
     font-weight: 600;
+}
+
+.equals {
+    flex-grow: 1;
+}
+
+.digits {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.digits :last-child {
+    width: 123px;
 }
