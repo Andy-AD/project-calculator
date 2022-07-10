@@ -17,7 +17,6 @@ buttons.forEach(button => {
 
 function populateDisplay(event) {
     let value = event.target.innerText;
-
     switch (display_value) {
         case 0:
             if (isOperator(value) || value === "C" || value === "=") {
@@ -33,9 +32,10 @@ function populateDisplay(event) {
         default:
             if (value === "=") {
                 arrayOfOperations.push(currentNumber.number);
-                calculate(arrayOfOperations);
+                display_value = calculate(arrayOfOperations);
                 currentNumber.number = '';
                 arrayOfOperations = [];
+                break;
             } else if (value === "C") {
                 display_value = 0;
                 currentNumber.number = '';
@@ -71,36 +71,24 @@ function populateDisplay(event) {
 }
 
 function calculate(value) {
-    let result;
-    let newValue = [];
-    console.log(value);
     let multiplicationIndex = value.indexOf('*');
     let divisionIndex = value.indexOf('/');
     while (multiplicationIndex > 0 || divisionIndex > 0) {
         if (multiplicationIndex < 0) {
-            result = operate('/', +value[divisionIndex - 1], +value[divisionIndex + 1]);
-            value.splice(divisionIndex - 1, 3, result);
+            value = operate('/',divisionIndex,value);
         } else if (divisionIndex < 0) {
-            result = operate('*', +value[multiplicationIndex - 1], +value[multiplicationIndex + 1]);
-            value.splice(multiplicationIndex - 1, 3, result);
+            value = operate('*', multiplicationIndex, value);
         } else {
-            if (multiplicationIndex < divisionIndex) {
-                result = operate('*', +value[multiplicationIndex - 1], +value[multiplicationIndex + 1]);
-                value.splice(multiplicationIndex - 1, 3, result);
-            } else {
-                result = operate('/', +value[divisionIndex - 1], +value[divisionIndex + 1]);
-                value.splice(divisionIndex - 1, 3, result);
-            }
+            multiplicationIndex < divisionIndex ? value = operate('*', multiplicationIndex, value)                                
+                                                : value = operate('/', divisionIndex,value);
         }
         multiplicationIndex = value.indexOf('*');
         divisionIndex = value.indexOf('/');
     }
-    result = +value[0];
-    for (let i = 1; i < value.length; i += 2) {
-        result = operate(value[i], result, +value[i + 1])
+    while (value.length !== 1) {
+        value = operate(value[1], 1, value);
     }
-
-    console.log(result);
+    return value[0];
 }
 
 function add(a, b) {
@@ -119,13 +107,26 @@ function divide(a, b) {
     return a / b;
 }
 
-function operate(operation, a, b) {
+function operate(operation, index, array) {
+    let result;
+    let a = +array[index - 1];
+    let b = +array[index + 1];
     switch (operation) {
-        case "+": return add(a, b);
-        case "-": return subtract(a, b);
-        case "*": return multiply(a, b);
-        case "/": return divide(a, b);
+        case "+": 
+                 result = add(a, b);
+                 break;
+        case "-": 
+                 result = subtract(a, b);
+                 break;
+        case "*": 
+                 result = multiply(a, b);
+                 break;
+        case "/": 
+                 result = divide(a, b);
+                 break;
     }
+    array.splice(index - 1, 3, result);
+    return array;
 }
 
 function isOperator(value) {
