@@ -17,10 +17,10 @@ buttons.forEach(button => {
 
 function populateDisplay(event) {
     let value = event.target.innerText;
-    
-    switch(display_value) {
+
+    switch (display_value) {
         case 0:
-            if (isOperator(value) || value === "C" || value ==="=") {
+            if (isOperator(value) || value === "C" || value === "=") {
                 break;
             } else if (value === '.') {
                 display_value = '0.';
@@ -35,7 +35,7 @@ function populateDisplay(event) {
                 arrayOfOperations.push(currentNumber.number);
                 calculate(arrayOfOperations);
                 currentNumber.number = '';
-                arrayOfOperations = []; 
+                arrayOfOperations = [];
             } else if (value === "C") {
                 display_value = 0;
                 currentNumber.number = '';
@@ -52,14 +52,14 @@ function populateDisplay(event) {
                 }
             } else if (isOperator(value)) {
                 if (lastValue === 'operator') {
-                    display_value = display_value.slice(0,-1) + value;
+                    display_value = display_value.slice(0, -1) + value;
                 } else {
                     display_value += value;
                 }
                 lastValue = "operator";
-                currentNumber.number === '' ? 
-                                            arrayOfOperations.pop().push(value) : 
-                                            arrayOfOperations.push(currentNumber.number,value); 
+                currentNumber.number === '' ?
+                    arrayOfOperations.pop().push(value) :
+                    arrayOfOperations.push(currentNumber.number, value);
                 currentNumber.number = '';
             } else {
                 display_value += value;
@@ -76,19 +76,34 @@ function calculate(value) {
     console.log(value);
     let multiplicationIndex = value.indexOf('*');
     let divisionIndex = value.indexOf('/');
-    while (multiplicationIndex > 0|| divisionIndex > 0) {
-        
-    }
-    if (multiplicationIndex < 0 && divisionIndex < 0) {
-        result = +value[0];
-        for (let i=1; i < value.length; i +=2 ) {
-            result = operate(value[i], result , +value[i+1])
+    while (multiplicationIndex > 0 || divisionIndex > 0) {
+        if (multiplicationIndex < 0) {
+            result = operate('/', +value[divisionIndex - 1], +value[divisionIndex + 1]);
+            value.splice(divisionIndex - 1, 3, result);
+        } else if (divisionIndex < 0) {
+            result = operate('*', +value[multiplicationIndex - 1], +value[multiplicationIndex + 1]);
+            value.splice(multiplicationIndex - 1, 3, result);
+        } else {
+            if (multiplicationIndex < divisionIndex) {
+                result = operate('*', +value[multiplicationIndex - 1], +value[multiplicationIndex + 1]);
+                value.splice(multiplicationIndex - 1, 3, result);
+            } else {
+                result = operate('/', +value[divisionIndex - 1], +value[divisionIndex + 1]);
+                value.splice(divisionIndex - 1, 3, result);
+            }
         }
+        multiplicationIndex = value.indexOf('*');
+        divisionIndex = value.indexOf('/');
     }
+    result = +value[0];
+    for (let i = 1; i < value.length; i += 2) {
+        result = operate(value[i], result, +value[i + 1])
+    }
+
     console.log(result);
 }
 
-function add(a , b) {
+function add(a, b) {
     return a + b;
 }
 
@@ -96,7 +111,7 @@ function subtract(a, b) {
     return a - b;
 }
 
-function multiply(a , b) {
+function multiply(a, b) {
     return a * b;
 }
 
@@ -105,12 +120,12 @@ function divide(a, b) {
 }
 
 function operate(operation, a, b) {
-     switch(operation) {
-        case "+": return add(a,b);
-        case "-": return subtract(a,b);
-        case "*": return multiply(a,b);
-        case "/": return divide(a/b);
-     }
+    switch (operation) {
+        case "+": return add(a, b);
+        case "-": return subtract(a, b);
+        case "*": return multiply(a, b);
+        case "/": return divide(a, b);
+    }
 }
 
 function isOperator(value) {
