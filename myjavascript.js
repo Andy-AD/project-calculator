@@ -71,7 +71,21 @@ function populateDisplay(event) {
 }
 
 function calculate(value) {
+    let result;
+    let newValue = [];
     console.log(value);
+    let multiplicationIndex = value.indexOf('*');
+    let divisionIndex = value.indexOf('/');
+    while (multiplicationIndex > 0|| divisionIndex > 0) {
+        
+    }
+    if (multiplicationIndex < 0 && divisionIndex < 0) {
+        result = +value[0];
+        for (let i=1; i < value.length; i +=2 ) {
+            result = operate(value[i], result , +value[i+1])
+        }
+    }
+    console.log(result);
 }
 
 function add(a , b) {
