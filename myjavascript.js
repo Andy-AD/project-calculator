@@ -15,6 +15,11 @@ const display = document.querySelector('.display');
 const buttons = document.querySelectorAll('button');
 buttons.forEach(button => {
     button.addEventListener('click', buttonHandler);
+    button.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+        }
+    })
 });
 
 document.addEventListener('keydown', keyboardHandler);
