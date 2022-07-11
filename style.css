@@ -21,16 +21,20 @@ body {
     width: 400px;
     padding: 20px;
     border-radius: 15px;
+    border: 2px black solid;
 }
 
 .display {
+    display: flex;
+    justify-content: right;
+    align-items: center;
     background-color: white;
-    text-align: right;
     padding: 5px;
     min-height: 100px;
-    font-size: 30px;
+    font-size: 50px;
     margin-bottom: 10px;
     overflow-wrap: normal;
+    border: 2px black solid;
 }
 
 .buttons {
