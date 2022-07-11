@@ -14,11 +14,24 @@ let arrayOfOperations = [];
 const display = document.querySelector('.display');
 const buttons = document.querySelectorAll('button');
 buttons.forEach(button => {
-    button.addEventListener('click', populateDisplay);
+    button.addEventListener('click', buttonHandler);
 });
 
-function populateDisplay(event) {
-    let value = event.target.innerText;
+document.addEventListener('keypress', keyboardHandler);
+
+function buttonHandler(event) {
+    populateDisplay(event.target.innerText);
+}
+
+function keyboardHandler(event) {
+    const acceptedValues = ['0','1','2','3','4','5','6','7','8','9','.','+','/','*','-','C','='];
+    if (acceptedValues.includes(event.key)) {
+        populateDisplay(event.key);
+    }
+    return;
+}
+
+function populateDisplay(value) {
     switch (display_value) {
         case '0':
             if (numberOne && !numberTwo && (value === '=' || isOperator(value))) {
@@ -86,7 +99,6 @@ function populateDisplay(event) {
                 } else {
                     display_value += value;
                 }                
-                console.log(currentNumber.number.length)
                 currentNumber.number += value;
                 lastValue = 'digit';
             }
