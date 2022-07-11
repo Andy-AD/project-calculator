@@ -81,9 +81,12 @@ function populateDisplay(event) {
             } else {
                 if (lastValue === 'operator') {
                     display_value = value;
+                } else if (currentNumber.number.length > 11) {
+                    break;
                 } else {
                     display_value += value;
-                }
+                }                
+                console.log(currentNumber.number.length)
                 currentNumber.number += value;
                 lastValue = 'digit';
             }
@@ -128,10 +131,17 @@ function operate(operation, a, b) {
             result = divide(a, b);
             break;
     }
+    if (numberHasDecimal(result)) {
+        result = +result.toFixed(2);
+    }
     return result;
 }
 
 function isOperator(value) {
     const operations = ['+', '-', '/', '*'];
     return operations.includes(value);
+}
+
+function numberHasDecimal(number) {
+    return (number - Math.floor(number) !== 0);
 }
