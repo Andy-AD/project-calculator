@@ -1,4 +1,4 @@
-let display_value = 0;
+let display_value = '0';
 let lastValue = '';
 let numberOne = 0;
 let numberTwo = 0;
@@ -20,8 +20,14 @@ buttons.forEach(button => {
 function populateDisplay(event) {
     let value = event.target.innerText;
     switch (display_value) {
-        case 0:
-            if (isOperator(value) || value === "C" || value === "=") {
+        case '0':
+            if (numberOne && !numberTwo && (value === '=' || isOperator(value))) {
+                numberTwo = +currentNumber.number;
+                display_value = operate(operation, numberOne, numberTwo);
+                numberTwo = 0;
+                numberOne = display_value;
+                break;
+            } else if (isOperator(value) || value === "C" || value === "=") {
                 break;
             } else if (value === '.') {
                 display_value = '0.';
@@ -45,7 +51,7 @@ function populateDisplay(event) {
                 }
             }
             if (value === "C") {
-                display_value = 0;
+                display_value = '0';
                 currentNumber.number = '';
                 numberOne = 0;
                 numberTwo = 0;
@@ -100,6 +106,9 @@ function multiply(a, b) {
 }
 
 function divide(a, b) {
+    if (!a || !b) {
+        return 'Error: Division by 0'
+    }
     return a / b;
 }
 
