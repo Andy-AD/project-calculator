@@ -17,18 +17,37 @@ buttons.forEach(button => {
     button.addEventListener('click', buttonHandler);
 });
 
-document.addEventListener('keypress', keyboardHandler);
+document.addEventListener('keydown', keyboardHandler);
 
 function buttonHandler(event) {
     populateDisplay(event.target.innerText);
 }
 
 function keyboardHandler(event) {
-    const acceptedValues = ['0','1','2','3','4','5','6','7','8','9','.','+','/','*','-','C','='];
+    const acceptedValues = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '+', '/', '*', '-', 'C'];
     if (acceptedValues.includes(event.key)) {
         populateDisplay(event.key);
+    } else if (event.key === 'Enter') {
+        populateDisplay('=');
+    } else if (event.key === 'Backspace') {
+        removeDigit();
     }
     return;
+}
+
+function removeDigit() {
+    let newValue;
+    if (display_value !== '0') {
+        if (display_value.length === 1) {
+            newValue = '0';
+        } else {
+            newValue = display_value.slice(0, -1);
+        }
+
+        currentNumber.number = newValue;
+        display_value = newValue;
+        display.textContent = display_value;
+    }
 }
 
 function populateDisplay(value) {
@@ -52,7 +71,7 @@ function populateDisplay(value) {
             break;
         default:
             if (value === '=') {
-                if (numberOne === 0) {                    
+                if (numberOne === 0) {
                     break;
                 } else {
                     numberTwo = +currentNumber.number;
@@ -98,7 +117,7 @@ function populateDisplay(value) {
                     break;
                 } else {
                     display_value += value;
-                }                
+                }
                 currentNumber.number += value;
                 lastValue = 'digit';
             }
